@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Album {
+  id        Int      @id @default(autoincrement())
+  mbid      String   @unique
+  title     String
+  artist    String
+  year      String
+  coverUrl  String
+  rating    Int?
+  notes     String?
+  createdAt DateTime @default(now())
+}
