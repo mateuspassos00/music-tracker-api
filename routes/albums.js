@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// GET /api/albums
+// GET /api/albums -- returns all albums in collection, sorted by creation date desc
 router.get("/", async (req, res) => {
   const albums = await prisma.album.findMany({
     orderBy: { createdAt: "desc" },
@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
   res.json(albums);
 });
 
-// POST /api/albums
+// POST /api/albums -- adds a new album to the collection, expects { mbid, title, artist, year, coverUrl } in body
 router.post("/", async (req, res) => {
   const { mbid, title, artist, year, coverUrl } = req.body;
   const existing = await prisma.album.findUnique({ where: { mbid } });
@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
   res.status(201).json(album);
 });
 
-// DELETE /api/albums/:id
+// DELETE /api/albums/:id -- removes an album from the collection by its database ID
 router.delete("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   await prisma.album.delete({ where: { id } });
